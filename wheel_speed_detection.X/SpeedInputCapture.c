@@ -11,7 +11,7 @@
 #define PI 3.14159265358979323846
 #define WHEEL_TEETH 20   //no. of ticks read per revolution
 #define  WHEEL_RADIUS 0.18 // wheel radius in meters
-#define units_kmh 3.6 // factor to change speed from m/s to km/h
+#define UNITS_KMH 3.6 // factor to change speed from m/s to km/h
 #define UNITS_MPH 2.25 // factor to change speed from m/s to mph
 unsigned int t0_init = 0, t1_init = 0, t0_final, t1_final, t0_period, t1_period;
 const double circum = WHEEL_RADIUS * 2 * PI;
@@ -41,7 +41,7 @@ void IC2_setup() {
     IC2CON1bits.ICBNE = 0b000; // IC buffer is empty
 }
 
-//  Initializes TMR1 (idk if this is even needed?)
+//  Initializes Timer 1 (TMR1)
 
 void timer_setup() {
 
@@ -82,10 +82,10 @@ void __attribute__((interrupt, no_auto_psv)) _IC2Interrupt() {
 
 void wheel_speed_calc() {
     rps_0 = 1 / (t0_period * WHEEL_TEETH); // revolutions per second for wheel_0
-    rps_1 = 1 / (t1_period * WHEEL_TEETH); // revolutions per second for wheel_0
+    rps_1 = 1 / (t1_period * WHEEL_TEETH); // revolutions per second for wheel_1
 
     double speed_0 = rps_0 * circum*UNITS_MPH; //calculates speed of wheel_0
-    double speed_1 = rps_1 * circum*UNITS_MPH; //calculates speed of wheel_0
+    double speed_1 = rps_1 * circum*UNITS_MPH; //calculates speed of wheel_1
 
 }
 
@@ -103,6 +103,6 @@ int main() {
     while (1) {
         wheel_speed_calc();
     }
-    return 0;
+    return 0; //added to resolve compiler warnings
 
 }
